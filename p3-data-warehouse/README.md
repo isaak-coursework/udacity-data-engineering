@@ -16,3 +16,7 @@ Dimension Tables:
 - **artists** - Recording artist info - name, location
 - **time** - Convenience table with conversions of timestamps into days, weekdays, etc. 
 
+*Insert Data Model ER Diagram*
+
+### Data Model Performance Decisions
+The facts table, **songplays**, is distributed by 
