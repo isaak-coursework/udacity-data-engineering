@@ -169,28 +169,46 @@ staging_songs_copy = f"""
 
 songplay_table_insert = """
     INSERT INTO songplays (
-        songplay_id
-        start_time
-        user_id
-        level
-        song_id
-        artist_id
-        session_id
-        location
+        start_time,
+        user_id,
+        level,
+        song_id,
+        artist_id,
+        session_id,
+        location,
         user_agent
     )
     SELECT 
+        se.ts,
+        se.userid,
+        se.level,
+        ss.song_id,
+        ss.artist_id,
+        se.sessionid,
+        se.location,
+        se.useragent
+    FROM staging_events se
+    JOIN staging_songs ss
+        ON se.artist = ss.artist_name AND se.song = ss.title
+    WHERE se.page = 'NextSong'
 """
 
 user_table_insert = """
     INSERT INTO users (
-        user_id
-        first_name
-        last_name
-        gender
+        user_id,
+        first_name,
+        last_name,
+        gender,
         level
     )
-    SELECT 
+    SELECT DISTINCT
+        userid,
+        firstname,
+        lastname,
+        gender,
+        level
+    FROM staging_events
+    WHERE page = 'NextSong'
 """
 
 song_table_insert = """
@@ -202,30 +220,51 @@ song_table_insert = """
         duration
     )
     SELECT 
+        song_id,
+        title,
+        artist_id,
+        year,
+        duration
+    FROM staging_songs
 """
 
 artist_table_insert = """
     INSERT INTO artists (
-        artist_id
-        name
-        location
-        lattitude
+        artist_id,
+        name,
+        location,
+        latitude,
         longitude
     )
     SELECT 
+        artist_id,
+        artist_name,
+        artist_location,
+        artist_lattitude,
+        artist_longitude
+    FROM staging_songs
 """
 
 time_table_insert = """
     INSERT INTO time (
-        start_time
-        hour
-        day
-        week
-        month
-        year
+        start_time,
+        hour,
+        day,
+        week,
+        month,
+        year,
         weekday
     )
-    SELECT 
+    SELECT DISTINCT
+        ts,
+        EXTRACT(HOUR FROM ts),
+        EXTRACT(DAY FROM ts),
+        EXTRACT(WEEK FROM ts),
+        EXTRACT(MONTH FROM ts),
+        EXTRACT(YEAR FROM ts),
+        EXTRACT(WEEKDAY FROM ts)
+    FROM staging_events
+    WHERE page = 'NextSong'
 """
 
 # QUERY LISTS
