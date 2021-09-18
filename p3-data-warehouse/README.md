@@ -16,7 +16,7 @@ Dimension Tables:
 - `artists` - Recording artist info - name, location
 - `time` - Convenience table with conversions of timestamps into days, weekdays, etc. 
 
-*Insert Data Model ER Diagram*
+![](warehouse_model.png)
 
 ### Data Model Performance Decisions
 
