@@ -82,15 +82,17 @@ staging_songs_table_create = """
 songplay_table_create = """
     CREATE TABLE songplays (
         songplay_id INT IDENTITY(0, 1) PRIMARY KEY,
-        start_time TIMESTAMP FOREIGN KEY REFERENCES time(start_time),
-        user_id INT FOREIGN KEY REFERENCES users(user_id),
+        start_time TIMESTAMP REFERENCES time(start_time),
+        user_id INT REFERENCES users(user_id),
         level TEXT,
-        song_id TEXT FOREIGN KEY REFERENCES songs(song_id),
-        artist_id TEXT FOREIGN KEY REFERENCES artists(artist_id),
+        song_id TEXT REFERENCES songs(song_id),
+        artist_id TEXT REFERENCES artists(artist_id),
         session_id INT,
         location TEXT,
         user_agent TEXT
     )
+    DISTKEY(user_id)
+    INTERLEAVED SORTKEY(start_time, song_id, artist_id)
 """
 
 user_table_create = """
@@ -101,16 +103,20 @@ user_table_create = """
         gender TEXT,
         level TEXT 
     )
+    DISTKEY(user_id)
+    SORTKEY(user_id)
 """
 
 song_table_create = """
     CREATE TABLE songs (
         song_id TEXT PRIMARY KEY,
         title TEXT,
-        artist_id TEXT FOREIGN KEY REFERENCES artists(artist_id),
+        artist_id TEXT REFERENCES artists(artist_id),
         year SMALLINT,
         duration NUMERIC
     )
+    DISTSTYLE all
+    SORTKEY(song_id)
 """
 
 artist_table_create = """
@@ -121,6 +127,8 @@ artist_table_create = """
         latitude NUMERIC,
         longitude NUMERIC
     )
+    DISTSTYLE all
+    SORTKEY(artist_id)
 """
 
 time_table_create = """
@@ -133,6 +141,8 @@ time_table_create = """
         year SMALLINT,
         weekday TEXT
     )
+    DISTKEY(start_time)
+    SORTKEY(start_time)
 """
 
 # STAGING TABLES
