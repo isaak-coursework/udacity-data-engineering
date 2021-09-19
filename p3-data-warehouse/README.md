@@ -43,3 +43,26 @@ Other potential distribution strategies:
 
 \***All of these decisions should be subject to change pending query performance analysis by Sparkify post-ETL. It is impossible to perfectly predict the ways in which business needs may alter the types of queries that should be optimized for.**
 
+## Repo Contents
+
+- `sql_queries.py`
+    * All of the queries to create warehouse staging and production tables.
+- `create_tables.py`
+    * Run to use queries from `sql_queries.py` to create both staging and production tables in new Sparkify warehouse. 
+- `etl.py`
+    * Run to first copy data into staging tables from S3, then extract relevant data into star schema as depicted above. 
+
+## Instructions - Initializing Warehouse
+
+1. Initialize a Redshift instance on AWS. Modify security policies to allow for open ingress, i.e. security group source = `0.0.0.0/0`.
+2. Create a role that allows S3 read access, and attach that role to your Redshift instance. 
+3. From this directory, copy `dwh.cfg.example` and rename to `dwh.cfg`: 
+```bash
+cp dwh.cfg.example dwh.cfg
+```
+4. Fill in `dwh.cfg` with the connection details for your redshift instance, as well as the role name for the role you attached to Redshift. 
+5. Run `create_tables.py` to initialize all tables in Redshift: 
+```bash
+python create_tables.py
+```
+6. Run `etl.py` to extract data from S3 into the staging tables, then subsequently insert appropriate data from the staging tables into our production table schema as depicted above. 
