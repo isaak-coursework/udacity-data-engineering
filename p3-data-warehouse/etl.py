@@ -6,18 +6,41 @@ from sql_queries import copy_table_queries, insert_table_queries
 
 
 def load_staging_tables(cur, conn):
+    """COPY data from S3 into staging tables. 
+
+    Args:
+        cur (psycopg2 cursor): Cursor for DB connection
+        conn (psycopg2.connection): DB connection
+    """
     for query in copy_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def insert_tables(cur, conn):
+    """Insert relevant values from staging tables into star schema. 
+
+    Args:
+        cur (psycopg2 cursor): Cursor for DB connection
+        conn (psycopg2.connection): DB connection
+    """
     for query in insert_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def main(insert_only, copy_only):
+    """Run Sparkify ETL
+
+    Args:
+        insert_only (bool): Only run INSERT statements to create warehouse 
+            data model. 
+        copy_only (bool): Only run COPY statements to pull data from S3 into 
+            staging tables. 
+
+    Raises:
+        ValueError: Cannot pass both 'insert_only' and 'copy_only'. 
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
