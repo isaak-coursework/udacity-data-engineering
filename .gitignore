@@ -1,4 +1,6 @@
 .DS_Store
 *.code-workspace
 *.cfg
+*.env
+*.pem
 __pycache__/
