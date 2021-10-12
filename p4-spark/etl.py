@@ -67,7 +67,7 @@ def process_song_data(
 
     # extract columns to create artists table
     artists_table = spark.sql("""
-        SELECT 
+        SELECT DISTINCT
             artist_id,
             artist_name AS name,
             artist_location AS location,
