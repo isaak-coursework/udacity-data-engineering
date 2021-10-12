@@ -15,4 +15,4 @@ aws emr create-cluster \
 --auto-terminate
 
 # SSH into EMR cluster
-aws emr ssh --cluster-id j-1WSPHLOMJ3OPI --key-pair-file ~/spark-cluster.pem
+aws emr ssh --cluster-id "$CLUSTER_ID" --key-pair-file "$HOME/$SPARK_SSH_KEY.pem"
