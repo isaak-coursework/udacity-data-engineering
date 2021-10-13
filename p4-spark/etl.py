@@ -106,7 +106,7 @@ def process_log_data(
 
     # Extract UTC start time
     df = df.withColumn('start_time', from_unixtime(df['ts']/1000))
-    df = df.withColumn('weekday', dayofweek('timestamp'))
+    df = df.withColumn('weekday', dayofweek('start_time'))
     
     # Register DF as queryable table
     df.createOrReplaceTempView('staging_events')
