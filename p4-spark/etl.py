@@ -1,5 +1,5 @@
-import configparser
-import os
+import logging
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import (
     from_unixtime, 
@@ -7,13 +7,7 @@ from pyspark.sql.functions import (
     dayofweek
 )
 
-
-config = configparser.ConfigParser()
-config.read('dl.cfg')
-
-os.environ['AWS_ACCESS_KEY_ID']=config['AWS']['AWS_ACCESS_KEY_ID']
-os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS']['AWS_SECRET_ACCESS_KEY']
-
+log = logging.getLogger(__name__)
 
 def create_spark_session() -> SparkSession:
     """Create a new Spark Session
@@ -21,6 +15,7 @@ def create_spark_session() -> SparkSession:
     Returns:
         SparkSession: Active SparkSession object. 
     """
+    log.info("Initializing Spark Session")
     spark = SparkSession \
         .builder \
         .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
@@ -45,6 +40,7 @@ def process_song_data(
     song_data_uri = f"{input_data}/song_data/*/*/*/*.json"
     
     # read song data file
+    log.info(f"Reading song data from {input_data}")
     df = spark.read.json(song_data_uri)
     df.createOrReplaceTempView('staging_songs')
 
@@ -80,6 +76,8 @@ def process_song_data(
                   .partitionBy('artist_id')
                   .parquet(f'{output_data}/artists'))
 
+    log.info(f"Song data processing complete!")
+
 
 def process_log_data(
     spark: SparkSession, 
@@ -98,6 +96,7 @@ def process_log_data(
     log_data = f"{input_data}/log_data/*/*/*.json"
 
     # read log data file
+    log.info(f"Reading log data from {log_data}")
     df = spark.read.json(log_data)
 
     # filter by actions for song plays
@@ -169,17 +168,43 @@ def process_log_data(
                     .partitionBy('year', 'month')
                     .parquet(f'{output_data}/songplays'))
 
+    log.info(f"Log data processing complete!")
+
 
 def main():
     """Run data processing job to load data into Sparkfiy data lake. 
     """
     spark = create_spark_session()
     input_data = "s3a://udacity-dend/"
-    output_data = "s3a://p4-spark/"
+    output_data = "s3a://p4-spark/data/"
     
     process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
+    log.info("All processing completed. ")
 
 
 if __name__ == "__main__":
+    import configparser
+    import os
+    import argparse
+
+    parser=argparse.ArgumentParser(
+        description="Create Sparkify data lake!"
+    )
+    parser.add_argument(
+        '-l', '--local',
+        action='store_true',
+        dest="local",
+        default=False,
+        help='Run on local machine'
+    )
+    args = parser.parse_args()
+
+    if args.local:
+        config = configparser.ConfigParser()
+        config.read('dl.cfg')
+
+        os.environ['AWS_ACCESS_KEY_ID']=config['AWS']['AWS_ACCESS_KEY_ID']
+        os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS']['AWS_SECRET_ACCESS_KEY']
+
     main()
