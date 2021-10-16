@@ -35,11 +35,16 @@ chmod u+x run-on-emr.sh
 ./run-on-emr.sh
 ```
 
-Note: To test locally instead, you can run 
+### Running locally
+To test locally instead, first copy dl.cfg.example and fill in the fields with your AWS access keys. 
+```bash
+cp dl.cfg.example dl.cfg
+```
+Then run: 
 ```bash
 python etl.py --local
 ```
-from this directory instead. 
+from this directory instead. Make sure to first 
 
 ## Data Lake Details
 
