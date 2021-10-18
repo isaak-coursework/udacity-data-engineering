@@ -54,3 +54,29 @@ This will import the information you entered into the `dwh.env` file as appropri
 
 ## Project Contents
 
+### Files
+
+- `dags/`
+    * `udac_example_dag.py`
+        * Main piece of code to run all operators and populate Sparkify's data warehouse from S3. 
+- `plugins/`
+    * `helpers/`
+        * `sql_queries.py`
+            * All select SQL statements to extract data from the Redshift staging tables. 
+    * `operators/`
+        * `stage_redshift.py`
+            * Contains `StageToRedshiftOperator` for copying data from S3 into Redshift staging tables. 
+        * `load_fact.py`
+            * Contains `LoadFactOperator` for loading data from staging tables into Sparkify's fact table, `songplays`. 
+        * `load_dimension.py`
+            * Contains `LoadDimensionOperator` for loading data from staging tables into Sparkify's dimension tables. 
+        * `data_quality.py`
+            * Contains `DataQualityOperator` for running data quality checks to ensure the success of the other operators. 
+    
+### Data Model
+
+This Airflow data pipeline creates a data lake with the below schema: 
+
+![](warehouse_model.png)
+
+In a production data pipeline, the LoadFactOperator would likely always append to the main fact table, and the runs would be partitioned by time, perhaps daily or even hourly. This would allow analysts and other database consumers to continuously consume log data produced by Sparkify customers. 
