@@ -9,3 +9,4 @@ My repo for working on and submitting projects for Udacity's [data engineering c
 - ### Project 3: [Data Warehouses - Redshift](p3-data-warehouse)
 - ### Project 4: [Data Lakes with Spark](p4-spark)
 - ### Project 5: [Data Pipelines with Airflow](p5-airflow)
+- ### Project 6: [Data Engineering Capstone Project](p6-airflow)
