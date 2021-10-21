@@ -1,0 +1,3 @@
+[submodule "aws-glue-libs"]
+	path = aws-glue-libs
+	url = https://github.com/awslabs/aws-glue-libs.git
