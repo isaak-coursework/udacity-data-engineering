@@ -18,16 +18,17 @@ display_help() {
 }
 
 case "$1" in
+
 get-image)
     docker pull postgres
-   ;;
+;;
 create)
     docker run -d \
     -p 5432:5432 \
     --name fake-redshift \
     -e POSTGRES_PASSWORD=postgres \
     postgres
-   ;;
+;;
 start)
     docker start fake-redshift
     ;;
@@ -35,10 +36,11 @@ stop)
     docker stop fake-redshift
     ;;
 help)
-   display_help
-   ;;
+    display_help
+;;
 *)
-   echo "No command specified, displaying help"
-   display_help
-   ;;
+    echo "No command specified, displaying help"
+    display_help
+;;
+
 esac
