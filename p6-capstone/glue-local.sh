@@ -11,14 +11,16 @@ display_help() {
    echo "Syntax: ./glue-local.sh [command]"
    echo
    echo "---commands---"
-   echo "help                   Print CLI help"
-   echo "build                  Build Image Locally"
-   echo "                  "
-   echo "bash                   Open up a bash terminal inside container"
+   echo "help             Print CLI help"
+   echo "build            Build Image Locally"
+   echo "pyspark          Start interactive Glue Pyspark shell with dependencies loaded!"
+   echo "glue-submit      Submit a script to Glue's Spark Submit Wrapper from 'jobs/' directory"
+   echo "bash             Open up a bash terminal inside container"
    echo
 }
 
 run_with_entrypoint() {
+   # shellcheck disable=1091
    source .env && docker run --rm -it \
       --volume "$PWD"/jobs:/root/aws-glue-libs/jobs \
       --env AWS_ACCESS_KEY_ID \
