@@ -39,6 +39,9 @@ pyspark)
 bash)
     run_with_entrypoint "/bin/bash"
    ;;
+glue-submit)
+    run_with_entrypoint "./bin/gluesparksubmit ./jobs/$2"
+   ;;
 help)
    display_help
    ;;
