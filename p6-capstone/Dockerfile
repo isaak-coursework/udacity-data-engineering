@@ -31,4 +31,7 @@ RUN apt-get update && apt-get install -y zip unzip
 RUN chmod u+x ./aws-glue-libs/bin/glue-setup.sh
 RUN ./aws-glue-libs/bin/glue-setup.sh
 
+COPY ./submit-job.sh ${USER_HOME_DIR}/aws-glue-libs/submit-job.sh
+RUN chmod u+x ${USER_HOME_DIR}/aws-glue-libs/submit-job.sh
+
 WORKDIR ${USER_HOME_DIR}/aws-glue-libs
