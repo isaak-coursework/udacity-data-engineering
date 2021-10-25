@@ -1,5 +1,17 @@
 # Data Engineering Capstone Project
 
+## Project Intent
+
+## Technologies Used
+
+### Running the Project Locally
+
+## Other Scenarios
+
+- The data was increased by 100x.
+- The pipelines would be run on a daily basis by 7 am every day.
+- The database needed to be accessed by 100+ people.
+
 ## AWS Glue - Local Development Environment
 
 This folder contains resources for running an AWS Glue 2.0 development environment locally in Docker. 
