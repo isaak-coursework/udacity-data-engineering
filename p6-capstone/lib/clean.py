@@ -99,6 +99,9 @@ def clean_immigration_data(immi: pd.DataFrame) -> pd.DataFrame:
 
     return immi
 
+def _map_coordinates_to_state():
+    pass
+
 def clean_temperature_data(temp: pd.DataFrame) -> pd.DataFrame:
     log.info("Cleaning temperature data...")
     col_names = {
@@ -156,10 +159,13 @@ def clean_airport_data(airport: pd.DataFrame) -> pd.DataFrame:
         'ident': 'airport_id',
         'iso_country': 'iso_country_code',
         'iso_region': 'iso_region_code',
+        'municipality': 'city'
     }
     airport = airport.rename(columns=col_names)
 
     airport[['latitude', 'longitude']] = airport['coordinates'].str.split(', ', expand=True)
     airport = airport.drop('coordinates', axis=1)
+
+    airport['city'] = airport['city'].str.upper()
 
     return airport
