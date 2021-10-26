@@ -99,9 +99,6 @@ def clean_immigration_data(immi: pd.DataFrame) -> pd.DataFrame:
 
     return immi
 
-def _map_coordinates_to_state():
-    pass
-
 def clean_temperature_data(temp: pd.DataFrame) -> pd.DataFrame:
     log.info("Cleaning temperature data...")
     col_names = {

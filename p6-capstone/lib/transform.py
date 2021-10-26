@@ -1,7 +1,10 @@
 import os
+import logging
 
 import pandas as pd
 import googlemaps
+
+log = logging.getLogger(__name__)
 
 def _get_latest_3_years(temp: pd.DataFrame) -> pd.DataFrame:
     max_date = temp['date'].max()
@@ -59,6 +62,8 @@ def calc_avg_monthly_temp_by_city_and_state(
     temp: pd.DataFrame, 
     from_s3: bool = False
 ) -> pd.DataFrame:
+    log.info("Transforming and aggregating temperature data...")
+    temp = _filter_temperatures(temp)
     temp = _find_state_by_coordinates(temp, from_s3=from_s3)
 
     group_cols = ['state_code', 'city', 'month']
@@ -72,6 +77,7 @@ def calc_avg_monthly_temp_by_city_and_state(
     ]]
 
 def agg_airports_by_city_and_state(airport: pd.DataFrame) -> pd.DataFrame:
+    log.info("Transforming and aggregating airport data...")
     airport = airport[airport['iso_country_code']=='US'].copy()
     airport['state_code'] = airport['iso_region_code'].str.split('-', expand=True)[1]
 
@@ -87,5 +93,6 @@ def agg_airports_by_city_and_state(airport: pd.DataFrame) -> pd.DataFrame:
         'avg_elevation',
         'most_common_type'
     ]
+    airport['most_common_type'] = airport['most_common_type'].apply(lambda x: x if isinstance(x, str) else pd.NA)
 
     return airport
