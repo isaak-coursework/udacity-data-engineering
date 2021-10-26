@@ -12,7 +12,8 @@ display_help() {
     echo "---commands---"
     echo "help             Print CLI help"
     echo "get-image        Pull the latest PostGres image from DockerHub"
-    echo "start            Run and expose the database!"
+    echo "create           Start up and expose the database!"
+    echo "start            Run an instance you have stopped"
     echo "stop             Spin down the database"
     echo "prompt           Start an interactive psql prompt in the container"
     echo
@@ -28,7 +29,11 @@ create)
     -p 5432:5432 \
     --name fake-redshift \
     -e POSTGRES_PASSWORD=postgres \
+    --volume "$PWD"/sql:/sql \
     postgres
+
+    sleep 1
+    docker exec -it fake-redshift psql -U postgres -c "CREATE DATABASE dev;"
     ;;
 start)
     docker start fake-redshift
@@ -36,9 +41,21 @@ start)
 stop)
     docker stop fake-redshift
     ;;
+destroy)
+    docker rm -f fake-redshift
+    ;;
 prompt)
     docker exec -it fake-redshift \
-        psql -U postgres
+        psql \
+        -U postgres \
+        -d dev
+    ;;
+execute)
+    docker exec -it fake-redshift \
+        psql \
+        -U postgres \
+        -d dev \
+        -f "$2"
     ;;
 help)
     display_help
