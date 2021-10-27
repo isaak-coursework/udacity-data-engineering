@@ -15,7 +15,9 @@ display_help() {
     echo "create           Start up and expose the database!"
     echo "start            Run an instance you have stopped"
     echo "stop             Spin down the database"
+    echo "destroy          Delete the DB container"
     echo "prompt           Start an interactive psql prompt in the container"
+    echo "execute          Execute a sql file - must be in sql/ dir"
     echo
 }
 
@@ -32,7 +34,7 @@ create)
     --volume "$PWD"/sql:/sql \
     postgres
 
-    sleep 1
+    sleep 3
     docker exec -it fake-redshift psql -U postgres -c "CREATE DATABASE dev;"
     ;;
 start)
