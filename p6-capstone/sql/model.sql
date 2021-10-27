@@ -2,20 +2,20 @@ CREATE TABLE "temperatures" (
     "state_code" TEXT,
     "city" TEXT,
     "month" INTEGER,
-    "avg_temperature" REAL,
-    "avg_temperature_uncertainty" REAL
+    "avg_temperature" NUMERIC,
+    "avg_temperature_uncertainty" NUMERIC
 );
 
 CREATE TABLE "demographics" (
     "city" TEXT,
     "state" TEXT,
-    "median_age" REAL,
-    "male_population" REAL,
-    "female_population" REAL,
+    "median_age" NUMERIC,
+    "male_population" NUMERIC,
+    "female_population" NUMERIC,
     "total_population" INTEGER,
-    "no_veterans" REAL,
-    "is_foreign_born" REAL,
-    "avg_household_size" REAL,
+    "no_veterans" NUMERIC,
+    "is_foreign_born" NUMERIC,
+    "avg_household_size" NUMERIC,
     "state_code" TEXT,
     "race" TEXT,
     "count" INTEGER
@@ -25,7 +25,7 @@ CREATE TABLE "airports" (
     "state_code" TEXT,
     "city" TEXT,
     "no_airports" INTEGER,
-    "avg_elevation" REAL,
+    "avg_elevation" NUMERIC,
     "most_common_type" TEXT
 );
 
@@ -45,6 +45,7 @@ CREATE TABLE "immigration_base" (
     "arrival_mode_code" INTEGER,
     "arrival_mode" TEXT,
     "departure_date" TIMESTAMP,
+    "departure_month" INTEGER,
     "airline" TEXT,
     "flight_number" TEXT,
     "state_settled_code" TEXT,
