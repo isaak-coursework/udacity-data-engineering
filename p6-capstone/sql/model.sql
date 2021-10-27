@@ -31,8 +31,6 @@ CREATE TABLE "airports" (
 
 CREATE TABLE "immigration_base" (
     "immigrant_id" INTEGER,
-    "year" INTEGER,
-    "month" INTEGER,
     "country_of_citizenship_code" INTEGER,
     "country_of_citizenship" TEXT,
     "country_of_residence_code" INTEGER,
