@@ -44,8 +44,6 @@ def clean_immigration_data(immi: pd.DataFrame) -> pd.DataFrame:
     log.info("Cleaning immigration data...")
     col_names = {
         'cicid': 'immigrant_id',
-        'i94yr': 'year',
-        'i94mon': 'month',
         'i94cit': 'country_of_citizenship_code',
         'i94res': 'country_of_residence_code',
         'i94port': 'arrival_port_code',
@@ -65,8 +63,6 @@ def clean_immigration_data(immi: pd.DataFrame) -> pd.DataFrame:
 
     dtypes = {
         'immigrant_id': pd.Int64Dtype(),
-        'year': pd.Int64Dtype(),
-        'month': pd.Int64Dtype(),
         'country_of_citizenship_code': pd.Int64Dtype(),
         'country_of_residence_code': pd.Int64Dtype(),
         'arrival_port_code': str,
@@ -92,6 +88,7 @@ def clean_immigration_data(immi: pd.DataFrame) -> pd.DataFrame:
     ]
     for col in date_cols:
         immi[col] = _convert_sas_date(immi[col])
+    immi['departure_month'] = immi['departure_date'].dt.month
 
     # See: https://regex101.com/r/hICz3H/1
     arrival_port_regex = r'^(.*?),? (\w{2})(?: \(BPS\))?$'

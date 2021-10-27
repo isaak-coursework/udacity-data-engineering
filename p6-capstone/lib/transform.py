@@ -36,8 +36,8 @@ def _filter_temperatures(temp: pd.DataFrame) -> pd.DataFrame:
 
     return temp
 
-def _find_state_by_coordinates(temp: pd.DataFrame, from_s3: bool = False) -> pd.DataFrame:
-    if from_s3:
+def _find_state_by_coordinates(temp: pd.DataFrame, use_google_api: bool = False) -> pd.DataFrame:
+    if not use_google_api:
         # Google Geocoder API costs money, so for testing we are reusing the 
         # already enriched dataset we retrieved using our free trial
         temp = pd.read_csv('s3://p6-capstone/data/GlobalLandTemperaturesByCityEnriched.csv')
@@ -60,11 +60,11 @@ def _find_state_by_coordinates(temp: pd.DataFrame, from_s3: bool = False) -> pd.
 
 def calc_avg_monthly_temp_by_city_and_state(
     temp: pd.DataFrame, 
-    from_s3: bool = False
+    use_google_api: bool = False
 ) -> pd.DataFrame:
     log.info("Transforming and aggregating temperature data...")
     temp = _filter_temperatures(temp)
-    temp = _find_state_by_coordinates(temp, from_s3=from_s3)
+    temp = _find_state_by_coordinates(temp, use_google_api=use_google_api)
 
     group_cols = ['state_code', 'city', 'month']
     agg_temp = temp.groupby(group_cols, as_index=False).mean()
