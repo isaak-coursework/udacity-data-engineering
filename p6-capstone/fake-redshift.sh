@@ -3,7 +3,6 @@
 # Fake a redshift instance (just a local postgres container!)
 
 display_help() {
-    # Display Help
     echo "=================================================="
     echo "  Fake Redshift! (It's just PostGres, sssshhhh)"
     echo "=================================================="
@@ -31,7 +30,7 @@ create)
     -p 5432:5432 \
     --name fake-redshift \
     -e POSTGRES_PASSWORD=postgres \
-    --volume "$PWD"/sql:/sql \
+    --volume "$PWD"/sql:/usr/sql \
     postgres
 
     sleep 3
@@ -57,7 +56,7 @@ execute)
         psql \
         -U postgres \
         -d dev \
-        -f "$2"
+        -f "/usr/sql/$2"
     ;;
 help)
     display_help
