@@ -30,3 +30,14 @@ SELECT
 FROM immigration_base
 GROUP BY arrival_port_state
 ORDER BY no_immigrants DESC;
+
+CREATE MATERIALIZED VIEW immigrants_by_state_settled AS
+SELECT 
+    state_settled_code,
+    COUNT(*) as no_immigrants,
+    ROUND(AVG(age), 2) AS avg_age,
+    SUM(CASE WHEN gender = 'M' THEN 1 ELSE 0 END) AS no_males,
+    SUM(CASE WHEN gender = 'F' THEN 1 ELSE 0 END) AS no_females
+FROM immigration_base
+GROUP BY state_settled_code
+ORDER BY no_immigrants DESC;
