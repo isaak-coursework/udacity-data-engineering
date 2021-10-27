@@ -30,5 +30,3 @@ SELECT
 FROM immigration_base
 GROUP BY arrival_port_state
 ORDER BY no_immigrants DESC;
-
-
