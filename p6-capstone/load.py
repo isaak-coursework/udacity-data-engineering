@@ -42,11 +42,11 @@ def process_immigration_data(
 def process_temperature_data(
     extractor: Extractor,
     db_engine: Engine,
-    local: bool = False
+    use_google_api: bool = False
 ):
     temp = extractor.temperature_data()
     temp = clean_temperature_data(temp)
-    temp = calc_avg_monthly_temp_by_city_and_state(temp, from_s3=local)
+    temp = calc_avg_monthly_temp_by_city_and_state(temp, use_google_api=use_google_api)
 
     table_name = 'temperatures'
     log.info(f"Loading table: {table_name}")
@@ -90,7 +90,7 @@ def process_airport_data(
         index=False
     )
 
-def build_db(local: bool):
+def build_db(local: bool, use_google_api: bool):
     extractor = Extractor(local=local)
 
     # In a real, non-local DB, the connection string should be loaded from environment
@@ -98,7 +98,7 @@ def build_db(local: bool):
     db_engine = create_engine(f'postgresql+psycopg2://postgres:postgres@localhost:5432/dev')
 
     process_immigration_data(extractor, db_engine)
-    process_temperature_data(extractor, db_engine, local=local)
+    process_temperature_data(extractor, db_engine, use_google_api=use_google_api)
     process_demographic_data(extractor, db_engine)
     process_airport_data(extractor, db_engine)
 
@@ -121,6 +121,13 @@ if __name__ =='__main__':
         default=False,
         help='Run on local machine'
     )
+    parser.add_argument(
+        '-g', '--google-api',
+        action='store_true',
+        dest="google",
+        default=False,
+        help="Enrich data using google's geocoder API. If false, will use pre-enriched data"
+    )
     args = parser.parse_args()
 
-    build_db(local=args.local)
+    build_db(local=args.local, use_google_api=args.google)
